@@ -1,6 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Chat GPT Export",
+    "author": "Marin Luic",
     "version": "0.0.1",
     "description": "Export options for singular chat instances of ChatGPT",
     "permissions": [

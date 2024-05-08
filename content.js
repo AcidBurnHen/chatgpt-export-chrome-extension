@@ -1,4 +1,6 @@
-// ------ HELPER FUNCTIONS ------ //
+// ------ HELPER FUNCTIONS & CONSTANTS ------ //
+const EXPORT_MSG = "Export chat"
+const EXPORTING_MSG = "Exporting chat..."
 
 function sleep(s) {
     return new Promise(resolve => setTimeout(resolve, s * 1000));
@@ -34,9 +36,9 @@ async function initialize(restart = false) {
     topMenu.classList.add('top_menu')
 
     console.log("Top menu found")
-    const exportBtn = document.createElement('button')
-    exportBtn.innerHTML = "Export chat"
-    exportBtn.className = "export_btn"
+    const popupBtn = document.createElement('button')
+    popupBtn.innerHTML = EXPORT_MSG
+    popupBtn.className = "export_btn"
 
     const topMenuFirstItem = topMenu.querySelector('div:nth-child(2)')
     if (!topMenuFirstItem || topMenuFirstItem == undefined) {
@@ -44,9 +46,9 @@ async function initialize(restart = false) {
         return
     }
 
-    topMenuFirstItem.insertAdjacentElement('afterend', exportBtn)
+    topMenuFirstItem.insertAdjacentElement('afterend', popupBtn)
 
-    exportBtn.addEventListener('click', () => exportChatContent(chatWindow, exportBtn))
+    popupBtn.addEventListener('click', () => openExportSettingsPopup(chatWindow, popupBtn, topMenu))
 
     if (!restart) {
         addWindowChangeStateUpdate()
@@ -67,15 +69,160 @@ function addWindowChangeStateUpdate() {
     }
 }
 
+// ------ EXPORT SETTINGS POPUP ------ //
+function openExportSettingsPopup(chatWindow, popupBtn, topMenu) {
+    console.log("Opening export settings popup")
+
+    // Main popup window
+    const exportSettingsPopup = document.createElement('div')
+    exportSettingsPopup.className = "export_settings_popup"
+
+    const exportSettingsHeading = document.createElement('h2')
+    exportSettingsHeading.innerHTML = "Export settings"
+    exportSettingsPopup.appendChild(exportSettingsHeading)
+
+    // Export type choices selection inputs
+    const exportTypeChoices = document.createElement('div')
+    exportTypeChoices.className = "export_type_choice"
+
+    const exportTypeHeading = document.createElement('h3')
+    exportTypeHeading.innerHTML = "Export type"
+    exportTypeChoices.appendChild(exportTypeHeading)
+
+    const fullChatChoice = document.createElement('input')
+    fullChatChoice.type = "checkbox"
+    fullChatChoice.id = "full_chat"
+    const fullChatLabel = document.createElement('label')
+    fullChatLabel.htmlFor = "full_chat"
+    fullChatLabel.innerHTML = "Full chat"
+    exportTypeChoices.appendChild(fullChatLabel)
+    exportTypeChoices.appendChild(fullChatChoice)
+
+
+    const aiChatChoice = document.createElement('input')
+    aiChatChoice.type = "checkbox"
+    aiChatChoice.id = "ai_chat"
+    const aiChatLabel = document.createElement('label')
+    aiChatLabel.htmlFor = "ai_chat"
+    aiChatLabel.innerHTML = "AI chat"
+    exportTypeChoices.appendChild(aiChatLabel)
+    exportTypeChoices.appendChild(aiChatChoice)
+
+    exportSettingsPopup.appendChild(exportTypeChoices)
+
+    // Export format choice
+    const exportFormatChoices = document.createElement('div')
+    exportFormatChoices.className = "export_format_choice"
+
+    const exportFormatHeading = document.createElement('h3')
+    exportFormatHeading.innerHTML = "Export format"
+    exportFormatChoices.appendChild(exportFormatHeading)
+
+    const exportFormatChoicesContainer = document.createElement('div')
+    exportFormatChoicesContainer.className = "export_type_choices_container"
+
+    const jsonChoiceContainer = document.createElement('div')
+    const jsonChoice = document.createElement('input')
+    jsonChoice.type = "checkbox"
+    jsonChoice.id = "json"
+    const jsonLabel = document.createElement('label')
+    jsonLabel.htmlFor = "json"
+    jsonLabel.innerHTML = "JSON"
+    jsonChoiceContainer.appendChild(jsonLabel)
+    jsonChoiceContainer.appendChild(jsonChoice)
+    exportFormatChoicesContainer.appendChild(jsonChoiceContainer)
+
+    const csvChoiceContainer = document.createElement('div')
+    const csvChoice = document.createElement('input')
+    csvChoice.type = "checkbox"
+    csvChoice.id = "csv"
+    const csvLabel = document.createElement('label')
+    csvLabel.htmlFor = "csv"
+    csvLabel.innerHTML = "CSV"
+    csvChoiceContainer.appendChild(csvLabel)
+    csvChoiceContainer.appendChild(csvChoice)
+    exportFormatChoicesContainer.appendChild(csvChoiceContainer)
+
+    const plainTextChoiceContainer = document.createElement('div')
+    const plainTextChoice = document.createElement('input')
+    plainTextChoice.type = "checkbox"
+    plainTextChoice.id = "plain_text"
+    const plainTextLabel = document.createElement('label')
+    plainTextLabel.htmlFor = "plain_text"
+    plainTextLabel.innerHTML = "Plain text"
+    plainTextChoiceContainer.appendChild(plainTextLabel)
+    plainTextChoiceContainer.appendChild(plainTextChoice)
+    exportFormatChoicesContainer.appendChild(plainTextChoiceContainer)
+
+    const wordChoiceContainer = document.createElement('div')
+    const wordChoice = document.createElement('input')
+    wordChoice.type = "checkbox"
+    wordChoice.id = "word_text"
+    const wordLabel = document.createElement('label')
+    wordLabel.htmlFor = "word_text"
+    wordLabel.innerHTML = "Word text"
+    wordChoiceContainer.appendChild(wordLabel)
+    wordChoiceContainer.appendChild(wordChoice)
+    exportFormatChoicesContainer.appendChild(wordChoiceContainer)
+
+    const htmlChoiceContainer = document.createElement('div')
+    const htmlChoice = document.createElement('input')
+    htmlChoice.type = "checkbox"
+    htmlChoice.id = "html"
+    const htmlLabel = document.createElement('label')
+    htmlLabel.htmlFor = "html"
+    htmlLabel.innerHTML = "HTML"
+    htmlChoiceContainer.appendChild(htmlLabel)
+    htmlChoiceContainer.appendChild(htmlChoice)
+    exportFormatChoicesContainer.appendChild(htmlChoiceContainer)
+
+    const pdfChoiceContainer = document.createElement('div')
+    const pdfChoice = document.createElement('input')
+    pdfChoice.type = "checkbox"
+    pdfChoice.id = "pdf"
+    const pdfLabel = document.createElement('label')
+    pdfLabel.htmlFor = "pdf"
+    pdfLabel.innerHTML = "PDF"
+    pdfChoiceContainer.appendChild(pdfLabel)
+    pdfChoiceContainer.appendChild(pdfChoice)
+    exportFormatChoicesContainer.appendChild(pdfChoiceContainer)
+
+    const markdownChoiceContainer = document.createElement('div')
+    const markdownChoice = document.createElement('input')
+    markdownChoice.type = "checkbox"
+    markdownChoice.id = "markdown"
+    const markdownLabel = document.createElement('label')
+    markdownLabel.htmlFor = "markdown"
+    markdownLabel.innerHTML = "Markdown"
+    markdownChoiceContainer.appendChild(markdownLabel)
+    markdownChoiceContainer.appendChild(markdownChoice)
+    exportFormatChoicesContainer.appendChild(markdownChoiceContainer)
+
+    exportFormatChoices.appendChild(exportFormatChoicesContainer)
+    exportSettingsPopup.appendChild(exportFormatChoices)
+
+    // Export button
+    const exportBtn = document.createElement('button')
+    exportBtn.className = 'export_btn_popup'
+    exportBtn.innerHTML = EXPORT_MSG
+    exportBtn.addEventListener('click', () => exportChatContent(chatWindow, popupBtn))
+    exportSettingsPopup.appendChild(exportBtn)
+
+    // Append under menu container
+
+    topMenu.insertAdjacentElement('afterend', exportSettingsPopup)
+
+}
 
 // ------ EXPORT LOGIC ------ //
-function exportChatContent(chatWindow, exportBtn) {
+function exportChatContent(chatWindow, popupBtn) {
     console.log("Exporting chat")
-    exportBtn.innerHTML = "Exporting..."
+    popupBtn.innerHTML = EXPORTING_MSG
 
     chatMessages = chatWindow.querySelectorAll('div[data-testid*="conversation-turn"]')
     if (!chatMessages || chatMessages == undefined || chatMessages.length == 0) {
         console.log("Chat messages not found")
+        popupBtn.innerHTML = EXPORT_MSG
         return
     }
 

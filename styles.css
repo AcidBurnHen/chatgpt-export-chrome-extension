@@ -3,14 +3,49 @@
     padding: 5px;
     cursor: pointer;
     justify-self: center;
+    font-weight: 100;
 }
 
-.export_btn:hover {
-    border: 1px solid rgb(86, 86, 86);
-    border-radius: 5px;
+.export_btn::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 45%;
+    right: 45%;
+    height: 1px;
+    background-color: black;
+    animation: retractBorder 1s ease-out forwards;
 }
 
-/* Top menu */
+@keyframes retractBorder {
+    0% {
+        left: 45%;
+        right: 45%;
+    }
+
+    100% {
+        left: 50%;
+        right: 50%;
+    }
+}
+
+.export_btn:hover::after {
+    animation: fillBorder 1s ease-out forwards;
+}
+
+@keyframes fillBorder {
+    0% {
+        left: 50%;
+        right: 50%;
+    }
+
+    100% {
+        left: 45%;
+        right: 45%;
+    }
+}
+
+/* Top menu fix to support button */
 
 .flex .top_menu {
     display: grid;
@@ -23,4 +58,71 @@
 
 .flex .top_menu div:nth-child(2) {
     gap: 0;
+}
+
+/* Export settings pop */
+
+.export_settings_popup {
+    display: grid;
+    width: fill-available;
+    z-index: 10;
+    padding: 1rem;
+    border-top: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+    position: fixed;
+    top: 3.5rem;
+    right: 0;
+    left: 16.2rem;
+    background-color: white;
+}
+
+.export_settings_popup h2 {
+    font-size: 1rem;
+    text-align: center;
+    font-weight: 100;
+}
+
+.export_type_choice {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.export_type_choice h3,
+.export_format_choice h3 {
+    font-size: 1rem;
+    font-weight: 100;
+}
+
+.export_type_choices_container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.export_type_choices_container div {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.export_btn_popup {
+    margin-top: 1.5rem;
+    justify-self: center;
+    font-size: 0.9rem;
+    padding: 0.4rem 1rem;
+    border: 1px solid lightgray;
+}
+
+.export_btn_popup:hover {
+    animation: changeBorder 3s ease-out forwards;
+}
+
+@keyframes changeBorder {
+    0% {
+        border: 1px solid lightgray;
+    }
+
+    100% {
+        border: 1px solid black;
+    }
 }
