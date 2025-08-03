@@ -157,6 +157,8 @@ input[type="checkbox"] {
 .export_type_choices_container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    padding-top: 0.4rem;
 }
 
 .export_type_choices_container div {

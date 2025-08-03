@@ -1,6 +1,7 @@
 // ----- GLOBAL STATE ----- // 
 const state = {
-    exportPopupOpen: false
+    exportPopupOpen: false,
+    exportChat: null,
 }
 
 // ------ HELPER FUNCTIONS & CONSTANTS ------ //
@@ -14,6 +15,7 @@ function sleep(s) {
 
 // ------ HELPERS ------ // 
 function downloadFile(filename, content, type) {
+    console.log("Downloading file: ", filename)
     const blob = new Blob([content], { type })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -142,8 +144,16 @@ function openExportSettingsPopup(chatWindow, popupBtn, topMenu) {
     function handleExportTypeToggle(selectedId) {
         if (selectedId === "full_chat") {
             aiChatChoice.checked = false
+            userChatChoice.checked = false
+            state.exportChat = 'full'
         } else if (selectedId === "ai_chat") {
             fullChatChoice.checked = false
+            userChatChoice.checked = false
+            state.exportChat = 'ai'
+        } else if (selectedId === "user_chat") {
+            aiChatChoice.checked = false
+            fullChatChoice.checked = false
+            state.exportChat = 'user'
         }
     }
 
@@ -174,6 +184,20 @@ function openExportSettingsPopup(chatWindow, popupBtn, topMenu) {
     aiChatContainer.appendChild(aiChatLabel)
     aiChatContainer.appendChild(aiChatChoice)
     exportTypeChoices.appendChild(aiChatContainer)
+
+    const userChatChoice = document.createElement('input')
+    userChatChoice.type = "checkbox"
+    userChatChoice.id = "user_chat"
+    userChatChoice.addEventListener("change", () => handleExportTypeToggle("user_chat"))
+
+    const userChatLabel = document.createElement('label')
+    userChatLabel.htmlFor = "user_chat"
+    userChatLabel.innerHTML = "User chat"
+
+    const userChatContainer = document.createElement('div')
+    userChatContainer.appendChild(userChatLabel)
+    userChatContainer.appendChild(userChatChoice)
+    exportTypeChoices.appendChild(userChatContainer)
 
     exportSettingsConfigContainer.appendChild(exportTypeChoices)
 
@@ -330,7 +354,7 @@ function exportChatContent(chatWindow, popupBtn) {
     console.log("Exporting chat")
     popupBtn.innerHTML = EXPORTING_MSG
 
-    chatMessages = chatWindow.querySelectorAll('div[data-testid*="conversation-turn"]')
+    chatMessages = chatWindow.querySelectorAll('article[data-testid*="conversation-turn"]')
     if (!chatMessages || chatMessages == undefined || chatMessages.length == 0) {
         console.log("Chat messages not found")
         popupBtn.innerHTML = EXPORT_MSG
@@ -361,10 +385,51 @@ function exportChatContent(chatWindow, popupBtn) {
         allMessages.push(chatContent)
     }
 
-    console.log("Chat messages found")
-    console.log(segregatedMessages)
-    console.log(allMessages)
+    let exportData = allMessages
+    if (state.exportChat === 'ai') {
+        exportData = segregatedMessages.ai
+    } else if (state.exportChat === 'user') {
+        exportData = segregatedMessages.user
+    }
 
-    // Finished
-    exportBtn.innerHTML = "Export chat"
+    const formatMap = {
+        json: () => {
+            const data = JSON.stringify(exportData, null, 2);
+            downloadFile("chat.json", data, "application/json");
+        },
+        csv: () => {
+            const rows = exportData.map(msg => `"${msg.replace(/"/g, '""')}"`);
+            downloadFile("chat.csv", rows.join("\n"), "text/csv");
+        },
+        plain_text: () => {
+            downloadFile("chat.txt", exportData.join("\n\n"), "text/plain");
+        },
+        word_text: () => {
+            const html = exportData.map(m => `<p>${escapeHTML(m)}</p>`).join("");
+            const wordDoc = `<html><body>${html}</body></html>`;
+            downloadFile("chat.doc", wordDoc, "application/msword");
+        },
+        html: () => {
+            const html = exportData.map(m => `<p>${escapeHTML(m)}</p>`).join("");
+            downloadFile("chat.html", `<html><body>${html}</body></html>`, "text/html");
+        },
+        pdf: () => {
+            const html = exportData.map(m => `<p>${escapeHTML(m)}</p>`).join("");
+            exportToPDF(`<html><body>${html}</body></html>`);
+        },
+        markdown: () => {
+            const md = exportData.map(m => `- ${m}`).join("\n\n");
+            downloadFile("chat.md", md, "text/markdown");
+        }
+    };
+
+    Object.keys(formatMap).forEach(id => {
+        if (document.getElementById(id)?.checked) {
+            console.log("Exporting")
+            formatMap[id]();
+        }
+    });
+
+
+    popupBtn.innerHTML = EXPORT_MSG
 }
