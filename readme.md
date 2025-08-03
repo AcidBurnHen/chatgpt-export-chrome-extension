@@ -9,6 +9,9 @@ A free and open source Chrome extension that lets you export individual ChatGPT 
 - Download conversations as JSON, CSV, plain text, HTML, Markdown, Microsoft Word, or PDF
 - Simple interface that integrates directly into the ChatGPT page
 
+## Example 
+![Example Screenshot](screenshot.png)
+
 ## Installation
 1. Clone or download this repository.
 2. Open Chrome and navigate to `chrome://extensions`.
