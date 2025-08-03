@@ -134,26 +134,41 @@ function openExportSettingsPopup(chatWindow, popupBtn, topMenu) {
     exportTypeHeading.innerHTML = "Export type"
     exportTypeChoices.appendChild(exportTypeHeading)
 
+    // Shared logic: when one is checked, uncheck the other
+    function handleExportTypeToggle(selectedId) {
+        if (selectedId === "full_chat") {
+            aiChatChoice.checked = false
+        } else if (selectedId === "ai_chat") {
+            fullChatChoice.checked = false
+        }
+    }
+
     const fullChatChoice = document.createElement('input')
     fullChatChoice.type = "checkbox"
     fullChatChoice.id = "full_chat"
+    fullChatChoice.addEventListener("change", () => handleExportTypeToggle("full_chat"))
+
     const fullChatLabel = document.createElement('label')
     fullChatLabel.htmlFor = "full_chat"
     fullChatLabel.innerHTML = "Full chat"
+
     exportTypeChoices.appendChild(fullChatLabel)
     exportTypeChoices.appendChild(fullChatChoice)
-
 
     const aiChatChoice = document.createElement('input')
     aiChatChoice.type = "checkbox"
     aiChatChoice.id = "ai_chat"
+    aiChatChoice.addEventListener("change", () => handleExportTypeToggle("ai_chat"))
+
     const aiChatLabel = document.createElement('label')
     aiChatLabel.htmlFor = "ai_chat"
     aiChatLabel.innerHTML = "AI chat"
+
     exportTypeChoices.appendChild(aiChatLabel)
     exportTypeChoices.appendChild(aiChatChoice)
 
     exportSettingsPopup.appendChild(exportTypeChoices)
+
 
     // Export format choice
     const exportFormatChoices = document.createElement('div')

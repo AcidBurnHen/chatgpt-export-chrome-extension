@@ -20,6 +20,10 @@
     --popup-gloss: linear-gradient(120deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0));
 }
 
+input[type="checkbox"] {
+    cursor: pointer;
+}
+
 /* Export btn */
 .export_btn {
     padding: 5px;
