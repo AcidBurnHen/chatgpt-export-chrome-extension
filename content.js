@@ -1,9 +1,51 @@
+// ----- GLOBAL STATE ----- // 
+const state = {
+    exportPopupOpen: false
+}
+
 // ------ HELPER FUNCTIONS & CONSTANTS ------ //
-const EXPORT_MSG = "Export chat"
-const EXPORTING_MSG = "Exporting chat..."
+const EXPORT_MSG = "Export"
+const EXPORTING_MSG = "Exporting..."
 
 function sleep(s) {
     return new Promise(resolve => setTimeout(resolve, s * 1000));
+}
+
+
+// ------ HELPERS ------ // 
+function downloadFile(filename, content, type) {
+    const blob = new Blob([content], { type })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+
+    a.href = url
+    a.download = filename
+    a.click()
+    URL.revokeObjectURL(url)
+}
+
+
+function escapeHTML(text) {
+    return text.replace(/[&<>"']/g, (m) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    })[m]);
+}
+
+function exportToPDF(html) {
+    const win = window.open('', '', 'height=700,width=900');
+    if (!win) {
+        return
+    }
+
+    win.document.write(html)
+    win.document.close()
+    win.focus()
+    win.print()
+    win.close()
 }
 
 // ------ MAIN INITIALIZATION ------ //
@@ -60,7 +102,7 @@ initialize()
 // ------ WINDOW CHANGE EVENT LISTENERS ------ // 
 function addWindowChangeStateUpdate() {
     const navigationLinks = document.querySelectorAll('nav > div ol li a')
-    // console.log("Nav links:", navigationLinks)
+    console.log("Nav links:", navigationLinks)
     if (navigationLinks && navigationLinks.length > 0) {
         for (let i = 0; i < navigationLinks.length; i++) {
             // console.log("Listening to", navigationLinks[i])
@@ -71,6 +113,9 @@ function addWindowChangeStateUpdate() {
 
 // ------ EXPORT SETTINGS POPUP ------ //
 function openExportSettingsPopup(chatWindow, popupBtn, topMenu) {
+    if (state.exportPopupOpen) {
+        return
+    }
     console.log("Opening export settings popup")
 
     // Main popup window
@@ -211,7 +256,27 @@ function openExportSettingsPopup(chatWindow, popupBtn, topMenu) {
     // Append under menu container
 
     topMenu.insertAdjacentElement('afterend', exportSettingsPopup)
+    state.exportPopupOpen = true;
+    setTimeout(() => {
+        window.addEventListener('click', closeExportSettingsPopup)
+    }, 1)
+}
 
+function closeExportSettingsPopup(_e) {
+    console.log("Registered outside click")
+    if (!state.exportPopupOpen) {
+        console.log("Not open")
+        return
+    }
+
+    const exportSettingsPopup = document.querySelector('.export_settings_popup')
+    if (!exportSettingsPopup || exportSettingsPopup === null) {
+        return
+    }
+
+    exportSettingsPopup.remove()
+    state.exportPopupOpen = false
+    window.removeEventListener('click', closeExportSettingsPopup)
 }
 
 // ------ EXPORT LOGIC ------ //
