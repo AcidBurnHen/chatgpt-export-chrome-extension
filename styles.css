@@ -6,7 +6,7 @@
     --popup-bg: rgba(255, 255, 255, 0.15);
     --popup-border: rgba(255, 255, 255, 0.3);
     --popup-shadow: rgba(31, 38, 135, 0.2);
-    --popup-gloss: linear-gradient(120deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+    --popup-gloss: linear-gradient(120deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1));
 }
 
 .dark {
@@ -17,7 +17,7 @@
     --popup-bg: rgba(0, 0, 0, 0.25);
     --popup-border: rgba(255, 255, 255, 0.2);
     --popup-shadow: rgba(0, 0, 0, 0.4);
-    --popup-gloss: linear-gradient(120deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0));
+    --popup-gloss: linear-gradient(120deg, rgba(255, 255, 255, 0.25), rgba(0, 0, 0, 0.1));
 }
 
 input[type="checkbox"] {
@@ -100,7 +100,6 @@ input[type="checkbox"] {
     display: grid;
     width: fit-content;
     z-index: 10;
-    padding: 1rem 2rem;
     position: fixed;
     top: 3.5rem;
     left: 50%;
@@ -120,12 +119,32 @@ input[type="checkbox"] {
     text-align: center;
     font-weight: 100;
     color: var(--text-color);
+    border-bottom: 1px solid var(--hover-border-color);
+    padding: .8rem;
+}
+
+.export_settings_config_container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    border-bottom: 1px solid var(--hover-border-color);
 }
 
 .export_type_choice {
     display: flex;
+    flex-direction: column;
     align-items: center;
     gap: 1rem;
+    border-right: 1px solid var(--hover-border-color);
+    padding: .8rem 0;
+
+    label {
+        margin-right: .8rem;
+    }
+}
+
+.export_format_choice {
+    padding: .8rem 0;
+    padding-left: 1rem;
 }
 
 .export_type_choice h3,
@@ -137,7 +156,7 @@ input[type="checkbox"] {
 
 .export_type_choices_container {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
 }
 
 .export_type_choices_container div {
@@ -147,13 +166,15 @@ input[type="checkbox"] {
 }
 
 .export_btn_popup {
-    margin-top: 1.5rem;
     justify-self: center;
     font-size: 0.9rem;
     padding: 0.4rem 1rem;
-    border: 1px solid var(--border-color);
+    border: 1px solid transparent;
+    border-radius: 1rem;
     color: var(--text-color);
     background: transparent;
+    margin-bottom: .5rem;
+    margin-top: .5rem;
 }
 
 .export_btn_popup:hover {
@@ -162,7 +183,7 @@ input[type="checkbox"] {
 
 @keyframes changeBorder {
     0% {
-        border: 1px solid var(--border-color);
+        border: 1px solid transparent;
     }
 
     100% {
@@ -173,7 +194,7 @@ input[type="checkbox"] {
 .popup_close_btn {
     position: absolute;
     top: 0.5rem;
-    right: 0.5rem;
+    right: 0.8rem;
     background: none;
     border: none;
     font-size: 1.5rem;

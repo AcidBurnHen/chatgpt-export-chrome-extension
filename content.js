@@ -126,6 +126,10 @@ function openExportSettingsPopup(chatWindow, popupBtn, topMenu) {
     exportSettingsHeading.innerHTML = "Export settings"
     exportSettingsPopup.appendChild(exportSettingsHeading)
 
+    // Container for the type choices and export choices 
+    const exportSettingsConfigContainer = document.createElement('div')
+    exportSettingsConfigContainer.className = 'export_settings_config_container'
+
     // Export type choices selection inputs
     const exportTypeChoices = document.createElement('div')
     exportTypeChoices.className = "export_type_choice"
@@ -152,8 +156,10 @@ function openExportSettingsPopup(chatWindow, popupBtn, topMenu) {
     fullChatLabel.htmlFor = "full_chat"
     fullChatLabel.innerHTML = "Full chat"
 
-    exportTypeChoices.appendChild(fullChatLabel)
-    exportTypeChoices.appendChild(fullChatChoice)
+    const fullChatContainer = document.createElement('div')
+    fullChatContainer.appendChild(fullChatLabel)
+    fullChatContainer.appendChild(fullChatChoice)
+    exportTypeChoices.appendChild(fullChatContainer)
 
     const aiChatChoice = document.createElement('input')
     aiChatChoice.type = "checkbox"
@@ -164,11 +170,12 @@ function openExportSettingsPopup(chatWindow, popupBtn, topMenu) {
     aiChatLabel.htmlFor = "ai_chat"
     aiChatLabel.innerHTML = "AI chat"
 
-    exportTypeChoices.appendChild(aiChatLabel)
-    exportTypeChoices.appendChild(aiChatChoice)
+    const aiChatContainer = document.createElement('div')
+    aiChatContainer.appendChild(aiChatLabel)
+    aiChatContainer.appendChild(aiChatChoice)
+    exportTypeChoices.appendChild(aiChatContainer)
 
-    exportSettingsPopup.appendChild(exportTypeChoices)
-
+    exportSettingsConfigContainer.appendChild(exportTypeChoices)
 
     // Export format choice
     const exportFormatChoices = document.createElement('div')
@@ -259,7 +266,10 @@ function openExportSettingsPopup(chatWindow, popupBtn, topMenu) {
     exportFormatChoicesContainer.appendChild(markdownChoiceContainer)
 
     exportFormatChoices.appendChild(exportFormatChoicesContainer)
-    exportSettingsPopup.appendChild(exportFormatChoices)
+    exportSettingsConfigContainer.appendChild(exportFormatChoices)
+
+    // Add the configs to the popup 
+    exportSettingsPopup.appendChild(exportSettingsConfigContainer)
 
     // Export button
     const exportBtn = document.createElement('button')
