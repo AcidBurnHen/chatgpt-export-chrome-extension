@@ -253,16 +253,26 @@ function openExportSettingsPopup(chatWindow, popupBtn, topMenu) {
     exportBtn.addEventListener('click', () => exportChatContent(chatWindow, popupBtn))
     exportSettingsPopup.appendChild(exportBtn)
 
+    // Close button
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'popup_close_btn';
+    closeBtn.innerHTML = '&times;';
+    closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeExportSettingsPopup();
+    });
+    exportSettingsPopup.appendChild(closeBtn);
+
     // Append under menu container
 
     topMenu.insertAdjacentElement('afterend', exportSettingsPopup)
     state.exportPopupOpen = true;
     setTimeout(() => {
-        window.addEventListener('click', closeExportSettingsPopup)
+        window.addEventListener('click', handleOutsideClick)
     }, 1)
 }
 
-function closeExportSettingsPopup(_e) {
+function closeExportSettingsPopup() {
     console.log("Registered outside click")
     if (!state.exportPopupOpen) {
         console.log("Not open")
@@ -276,7 +286,18 @@ function closeExportSettingsPopup(_e) {
 
     exportSettingsPopup.remove()
     state.exportPopupOpen = false
-    window.removeEventListener('click', closeExportSettingsPopup)
+}
+
+function handleOutsideClick(e) {
+    const exportSettingsPopup = document.querySelector('.export_settings_popup')
+
+    const isInside = exportSettingsPopup?.contains(e.target);
+    const isTrigger = document.querySelector('.export_btn')?.contains(e.target);
+
+    if (!isInside && !isTrigger) {
+        closeExportSettingsPopup();
+        window.removeEventListener('click', handleOutsideClick);
+    }
 }
 
 // ------ EXPORT LOGIC ------ //
