@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Chat GPT Export",
     "author": "Marin Luic",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Export options for singular chat instances of ChatGPT",
     "permissions": [
         "activeTab"
@@ -10,9 +10,9 @@
     "action": {
         "default_popup": "popup.html",
         "default_icon": {
-            "16": "icon2.png",
-            "48": "icon2.png",
-            "128": "icon2.png"
+            "16": "icon.png",
+            "48": "icon.png",
+            "128": "icon.png"
         }
     },
     "background": {
@@ -21,7 +21,8 @@
     "content_scripts": [
         {
             "matches": [
-                "*://chatgpt.com/*"
+                "*://chatgpt.com/*",
+                "*://chat.openai.com/*"
             ],
             "js": [
                 "content.js"

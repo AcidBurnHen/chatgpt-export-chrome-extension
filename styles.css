@@ -1,9 +1,32 @@
+:root {
+    --text-color: black;
+    --border-color: lightgray;
+    --hover-border-color: black;
+    --after-bg-color: black;
+    --popup-bg: rgba(255, 255, 255, 0.15);
+    --popup-border: rgba(255, 255, 255, 0.3);
+    --popup-shadow: rgba(31, 38, 135, 0.2);
+    --popup-gloss: linear-gradient(120deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+}
+
+.dark {
+    --text-color: white;
+    --border-color: #555;
+    --hover-border-color: white;
+    --after-bg-color: white;
+    --popup-bg: rgba(0, 0, 0, 0.25);
+    --popup-border: rgba(255, 255, 255, 0.2);
+    --popup-shadow: rgba(0, 0, 0, 0.4);
+    --popup-gloss: linear-gradient(120deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0));
+}
+
 /* Export btn */
 .export_btn {
     padding: 5px;
     cursor: pointer;
     justify-self: center;
     font-weight: 100;
+    color: var(--text-color);
 }
 
 .export_btn::after {
@@ -13,7 +36,7 @@
     left: 45%;
     right: 45%;
     height: 1px;
-    background-color: black;
+    background-color: var(--after-bg-color);
     animation: retractBorder 1s ease-out forwards;
 }
 
@@ -46,7 +69,6 @@
 }
 
 /* Top menu fix to support button */
-
 .flex .top_menu {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -61,25 +83,39 @@
 }
 
 /* Export settings pop */
+.export_settings_popup::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--popup-gloss);
+    pointer-events: none;
+}
 
 .export_settings_popup {
     display: grid;
-    width: fill-available;
+    width: fit-content;
     z-index: 10;
-    padding: 1rem;
-    border-top: 1px solid lightgray;
-    border-bottom: 1px solid lightgray;
+    padding: 1rem 2rem;
     position: fixed;
     top: 3.5rem;
-    right: 0;
-    left: 16.2rem;
-    background-color: white;
+    left: 50%;
+    transform: translate(-50%, 0);
+    border-radius: 12px;
+
+    background: var(--popup-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--popup-border);
+    box-shadow: 0 8px 32px 0 var(--popup-shadow);
+    color: var(--text-color);
 }
 
 .export_settings_popup h2 {
     font-size: 1rem;
     text-align: center;
     font-weight: 100;
+    color: var(--text-color);
 }
 
 .export_type_choice {
@@ -92,6 +128,7 @@
 .export_format_choice h3 {
     font-size: 1rem;
     font-weight: 100;
+    color: var(--text-color);
 }
 
 .export_type_choices_container {
@@ -110,7 +147,9 @@
     justify-self: center;
     font-size: 0.9rem;
     padding: 0.4rem 1rem;
-    border: 1px solid lightgray;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    background: transparent;
 }
 
 .export_btn_popup:hover {
@@ -119,10 +158,10 @@
 
 @keyframes changeBorder {
     0% {
-        border: 1px solid lightgray;
+        border: 1px solid var(--border-color);
     }
 
     100% {
-        border: 1px solid black;
+        border: 1px solid var(--hover-border-color);
     }
 }
